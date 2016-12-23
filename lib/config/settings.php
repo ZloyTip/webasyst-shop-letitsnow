@@ -26,4 +26,23 @@ return array(
         'value' => '10000',
         'control_type' => waHtmlControl::INPUT,
     ),
+    'snow' => array(
+        'title' => 'Снежинки',
+        'description' => '',
+        'value' => 'snow',
+        'control_type' => waHtmlControl::SELECT,
+        'options' => array(
+            'snow' => 'Белые',
+            'snow_blue' => 'Голубые',
+            'snow_green' => 'Зелёные',
+            'snow_pink' => 'Розовые',
+            'snow_yellow' => 'Жёлтые',
+        )
+    ),
+    'demo' => array(
+        'title' => 'Демо',
+        'description' => '',
+        'value' => '',
+        'control_type' => waHtmlControl::CUSTOM.' shopLetitsnowPlugin::snowControl',
+    ),
 );

@@ -14,6 +14,7 @@ class shopLetitsnowPlugin extends shopPlugin{
             $intensive  = (int) $plugin->getSettings('intensive');
             $selector   = htmlspecialchars($plugin->getSettings('selector'), ENT_QUOTES, 'UTF-8');
             $time       = (int) $plugin->getSettings('time');
+            $snow       = $plugin->getSettings('snow');
 
             $res = "<script type=\"text/javascript\" src=\"{$static_url}plugins/letitsnow/js/letitsnow.js\"></script>
     <script type=\"text/javascript\">
@@ -21,7 +22,7 @@ class shopLetitsnowPlugin extends shopPlugin{
         $('{$selector}').shop_letitsnow({
             intensive: parseInt('{$intensive}'),
             time : parseInt('{$time}'),
-            src: '{$static_url}plugins/letitsnow/img/snow/'
+            src: '{$static_url}plugins/letitsnow/img/{$snow}/'
         });
     });
     </script>
@@ -30,6 +31,14 @@ class shopLetitsnowPlugin extends shopPlugin{
         return $res;
         }
         return '';
+    }
+
+    public static function snowControl($name, $params)
+    {
+        $view = wa()->getView();
+        $view->assign('name', $name);
+        $template = dirname(__FILE__).'/../templates/controls/snow.html';
+        return $view->fetch($template);
     }
 
     public function frontendHead()

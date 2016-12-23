@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="{$wa_url}wa-content/js/farbtastic/farbtastic.css" type="text/css" />
+
+<p>
+    Параметры ниже нужны исключительно для демонстрации.
+</p>
+<p>
+    <span class="hint">Высота демо-блока</span><br>
+    <input type="number" name="demo[height]" value="300" min="300">
+</p>
+<div>
+    <span class="hint">Цвет</span><br>
+    <input type="text" name="demo[color]" value="#8e44ad">
+    <i class="icon16 color" style="cursor:pointer;"></i>
+    <div class="js-colorpicker"></div>
+    <p class="hint"></p>
+</div>
+<p>
+    <input type="button" class="button blue" value="Обновить демо" id="refresh">
+</p>
+
+
+<div id="snow" style="overflow: hidden;position: relative"></div>
+<script type="text/javascript" src="{$wa_app_static_url}plugins/letitsnow/js/letitsnow.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    var $c = $('#snow'),
+        $f = $c.closest('form');
+
+    $f.find('#refresh').click(function () {
+
+        var intensive = $f.find('[name="shop_letitsnow[intensive]"]').val(),
+            time = $f.find('[name="shop_letitsnow[time]"]').val(),
+            src = $f.find('[name="shop_letitsnow[snow]"]').val(),
+            color = $f.find('[name="demo[color]"]').val(),
+            height = $f.find('[name="demo[height]"]').val()
+            ;
+
+        $c.css({
+            background:color,
+            height:height+'px'
+        })
+
+        $c.shop_letitsnow({
+            intensive: parseInt(intensive),
+            time : parseInt(time),
+            src: '{$wa_app_static_url}plugins/letitsnow/img/'+src+'/'
+        });
+    }).trigger('change');
+
+
+
+    $.ajax({
+        dataType: "script",
+        url: "{$wa_url}wa-content/js/farbtastic/farbtastic.js?{$wa->version(true)}",
+        cache: true
+    }).done(function() {
+        var $input = $f.find('[name="demo[color]"]');
+        var $form = $input.parent();
+        var $colorpicker_wrapper = $form.find('.js-colorpicker').hide();
+        var $icon = $form.find('i.icon16.color');
+
+        var farbtastic = $.farbtastic($colorpicker_wrapper, setColor);
+        farbtastic.widgetCoords = function (event) {
+            var offset = $(farbtastic.wheel).offset();
+            return { x: (event.pageX - offset.left) - farbtastic.width / 2, y: (event.pageY - offset.top) - farbtastic.width / 2 };
+        };
+
+        $icon.css('cursor', 'pointer').click(function() {
+            $colorpicker_wrapper.slideToggle();
+        });
+
+        setColor($input.val() || '#ffffff');
+
+        $input.on('change keyup', function() {
+            $icon.css('background', $input.val());
+            farbtastic.setColor($input.val());
+        });
+
+        function setColor(color) {
+            $icon.css('background', color);
+            farbtastic.setColor(color);
+            $input.val(color);
+        }
+    });
+
+});
+</script>
